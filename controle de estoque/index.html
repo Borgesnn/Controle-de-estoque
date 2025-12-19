@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gotemburgo - Controle de Estoque</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="style/pedido.css">
+    
+</head>
+<body>
+    
+    <!-- ====================================
+         TELA DE LOGIN
+         Esta seção é exibida primeiro e oculta o sistema principal
+         ==================================== -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <!-- Logo e branding -->
+            <div class="login-header">
+                <div class="logo-circle">
+                    <img src="images/got.png" alt="Logo Gotemburgo" class="logo-image">
+                </div>
+                <h1>Gotemburgo</h1>
+                <p>Sistema de Controle de Estoque</p>
+            </div>
+
+            <!-- Formulário de login -->
+            <form id="loginForm" class="login-form">
+                <div class="form-group">
+                    <label for="loginEmail">E-mail</label>
+                    <input type="email" id="loginEmail" placeholder="seu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="loginPassword">Senha</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="btn-login">
+                    Entrar no Sistema
+                </button>
+                
+                <div class="login-footer">
+                    <p>Credenciais padrão: admin@gotemburgo.com / admin123</p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ====================================
+         SISTEMA PRINCIPAL
+         Esta seção é exibida após o login bem-sucedido
+         ==================================== -->
+    <div id="mainSystem" class="main-system" style="display: none;">
+        
+        <!-- Barra lateral de navegação -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <img src="images/got.png" alt="Logo" class="logo-image-sidebar">
+                    </div>
+                    <span>Gotemburgo</span>
+                </div>
+            </div>
+
+            <!-- Menu de navegação -->
+            <!-- Atualizado para suportar navegação entre páginas -->
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item" data-page="produtos">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/>
+                        <path d="M3 9H21" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Produtos
+                </a>
+                <!-- Adicionado item de navegação para Pedidos -->
+                <a href="#" class="nav-item" data-page="pedidos">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M9 5H7C6.46957 5 5.96086 5.21071 5.58579 5.58579C5.21071 5.96086 5 6.46957 5 7V19C5 19.5304 5.21071 20.0391 5.58579 20.4142C5.96086 20.7893 6.46957 21 7 21H17C17.5304 21 18.0391 20.7893 18.4142 20.4142C18.7893 20.0391 19 19.5304 19 19V7C19 6.46957 18.7893 5.96086 18.4142 5.58579C18.0391 5.21071 17.5304 5 17 5H15" stroke="currentColor" stroke-width="2"/>
+                        <path d="M9 5C9 4.46957 9.21071 3.96086 9.58579 3.58579C9.96086 3.21071 10.4696 3 11 3H13C13.5304 3 14.0391 3.21071 14.4142 3.58579C14.7893 3.96086 15 4.46957 15 5C15 5.53043 14.7893 6.03914 14.4142 6.41421C14.0391 6.78929 13.5304 7 13 7H11C10.4696 7 9.96086 6.78929 9.58579 6.41421C9.21071 6.03914 9 5.53043 9 5Z" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Pedidos
+                </a>
+                <!-- Adicionando item de navegação para Movimentação de Brindes -->
+                <a href="#" class="nav-item" data-page="movimentacao">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        <path d="M20 21H4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    Movimentação
+                </a>
+                <a href="#" class="nav-item" data-page="relatorios">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M16 21V5C16 4.46957 15.7893 3.96086 15.4142 3.58579C15.0391 3.21071 14.5304 3 14 3H10C9.46957 3 8.96086 3.21071 8.58579 3.58579C8.21071 3.96086 8 4.46957 8 5V21" stroke="currentColor" stroke-width="2"/>
+                        <path d="M3 5H8" stroke="currentColor" stroke-width="2"/>
+                        <path d="M3 10H8" stroke="currentColor" stroke-width="2"/>
+                        <path d="M3 15H8" stroke="currentColor" stroke-width="2"/>
+                        <path d="M16 5H21" stroke="currentColor" stroke-width="2"/>
+                        <path d="M16 10H21" stroke="currentColor" stroke-width="2"/>
+                        <path d="M16 15H21" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Relatórios
+                </a>
+                <a href="#" class="nav-item" data-page="configuracoes">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 1V3" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 21V23" stroke="currentColor" stroke-width="2"/>
+                        <path d="M4.22 4.22L5.64 5.64" stroke="currentColor" stroke-width="2"/>
+                        <path d="M18.36 18.36L19.78 19.78" stroke="currentColor" stroke-width="2"/>
+                        <path d="M1 12H3" stroke="currentColor" stroke-width="2"/>
+                        <path d="M21 12H23" stroke="currentColor" stroke-width="2"/>
+                        <path d="M4.22 19.78L5.64 18.36" stroke="currentColor" stroke-width="2"/>
+                        <path d="M18.36 5.64L19.78 4.22" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Configurações
+                </a>
+            </nav>
+
+            <!-- Botão de logout -->
+            <div class="sidebar-footer">
+                <button id="btnLogout" class="btn-logout">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9" stroke="currentColor" stroke-width="2"/>
+                        <path d="M16 17L21 12L16 7" stroke="currentColor" stroke-width="2"/>
+                        <path d="M21 12H9" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Sair
+                </button>
+                <div class="user-info">
+                    <div class="user-avatar">A</div>
+                    <div class="user-details">
+                        <span class="user-name" id="userName">Administrador</span>
+                        <span class="user-role">Gerente</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Conteúdo principal -->
+        <main class="main-content">
+            
+            <!-- ====================================
+                 PÁGINA: DASHBOARD
+                 ==================================== -->
+            <div id="pageDashboard" class="page-content active">
+                <!-- Cabeçalho do sistema -->
+                <header class="header">
+                    <div class="header-left">
+                        <h1>Controle de Estoque</h1>
+                        <p>Gerencie seus produtos de forma eficiente</p>
+                    </div>
+                    <div class="header-right">
+                        <div class="search-box">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                                <path d="M21 21L16.65 16.65" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            <input type="text" id="searchInput" placeholder="Buscar por código, nome ou categoria...">
+                        </div>
+                        <button id="btnAdicionar" class="btn-primary">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 5V19" stroke="currentColor" stroke-width="2"/>
+                                <path d="M5 12H19" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            Adicionar Produto
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Cards de estatísticas -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-blue">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M20 7H4C2.89543 7 2 7.89543 2 9V19C2 20.1046 2.89543 21 4 21H20C21.1046 21 22 20.1046 22 19V9C22 7.89543 21.1046 7 20 7Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M16 21V5C16 4.46957 15.7893 3.96086 15.4142 3.58579C15.0391 3.21071 14.5304 3 14 3H10C9.46957 3 8.96086 3.21071 8.58579 3.58579C8.21071 3.96086 8 4.46957 8 5V21" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Total de Produtos</span>
+                            <span class="stat-value" id="totalProdutos">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-green">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.7088 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.76489 14.1003 1.98232 16.07 2.86" stroke="currentColor" stroke-width="2"/>
+                                <path d="M22 4L12 14.01L9 11.01" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Em Estoque</span>
+                            <span class="stat-value" id="emEstoque">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-yellow">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M10.29 3.86L1.82 18C1.64537 18.3024 1.55296 18.6453 1.55199 18.9945C1.55101 19.3437 1.64151 19.6871 1.81445 19.9905C1.98738 20.2939 2.23675 20.5467 2.53773 20.7239C2.83871 20.9011 3.18082 20.9962 3.53 21H20.47C20.8192 20.9962 21.1613 20.9011 21.4623 20.7239C21.7633 20.5467 22.0126 20.2939 22.1856 19.9905C22.3585 19.6871 22.449 19.3437 22.448 18.9945C22.447 18.6453 22.3546 18.3024 22.18 18L13.71 3.86C13.5317 3.56611 13.2807 3.32312 12.9812 3.15448C12.6817 2.98585 12.3437 2.89725 12 2.89725C11.6563 2.89725 11.3183 2.98585 11.0188 3.15448C10.7193 3.32312 10.4683 3.56611 10.29 3.86Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 9V13" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="12" cy="17" r="0.5" fill="currentColor" stroke="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Estoque Baixo</span>
+                            <span class="stat-value" id="estoqueMinimo">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-red">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                <path d="M15 9L9 15" stroke="currentColor" stroke-width="2"/>
+                                <path d="M9 9L15 15" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Sem Estoque</span>
+                            <span class="stat-value" id="semEstoque">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabela de produtos -->
+                <div class="table-container">
+                    <table class="products-table">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nome do Produto</th>
+                                <th>Categoria</th>
+                                <th>Quantidade</th>
+                                <th>Mínimo</th>
+                                <th>Localização</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabelaProdutos">
+                            <!-- Linhas serão inseridas via JavaScript -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ====================================
+                 PÁGINA: PRODUTOS
+                 ==================================== -->
+            <div id="pageProdutos" class="page-content">
+                <header class="header">
+                    <div class="header-left">
+                        <h1>Gerenciar Produtos</h1>
+                        <p>Visualize e gerencie todos os produtos do estoque</p>
+                    </div>
+                    <div class="header-right">
+                        <select id="filtroCategoria" class="filter-select">
+                            <option value="">Todas as categorias</option>
+                            <option value="Peças">Peças</option>
+                            <option value="Fluidos">Fluidos</option>
+                            <option value="Acessórios">Acessórios</option>
+                            <option value="Ferramentas">Ferramentas</option>
+                        </select>
+                        <button id="btnAdicionarProduto" class="btn-primary">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 5V19" stroke="currentColor" stroke-width="2"/>
+                                <path d="M5 12H19" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            Novo Produto
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Grid de produtos -->
+                <div class="products-grid" id="gridProdutos">
+                    <!-- Cards serão inseridos via JavaScript -->
+                </div>
+            </div>
+
+            <!-- Nova página de Pedidos -->
+            <div id="pagePedidos" class="page-content">
+                <header class="header">
+                    <div class="header-left">
+                        <h1>Gerenciar Pedidos</h1>
+                        <p>Solicitações de produtos do estoque</p>
+                    </div>
+                    <div class="header-right">
+                        <div class="filter-buttons">
+                            <button class="filter-btn active" data-status="todos" onclick="filtrarPedidos('todos')">
+                                Todos
+                            </button>
+                            <button class="filter-btn" data-status="pendente" onclick="filtrarPedidos('pendente')">
+                                Pendentes
+                            </button>
+                            <button class="filter-btn" data-status="aprovada" onclick="filtrarPedidos('aprovada')">
+                                Aprovados
+                            </button>
+                            <button class="filter-btn" data-status="rejeitada" onclick="filtrarPedidos('rejeitada')">
+                                Rejeitados
+                            </button>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Cards de estatísticas dos pedidos -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-yellow">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 6V12L16 14" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Pendentes</span>
+                            <span class="stat-value" id="statPendentes">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-green">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M22 11.08V12C21.9988 14.1564 21.3005 16.2547 20.0093 17.9818C18.7182 19.7088 16.9033 20.9725 14.8354 21.5839C12.7674 22.1953 10.5573 22.1219 8.53447 21.3746C6.51168 20.6273 4.78465 19.2461 3.61096 17.4371C2.43727 15.628 1.87979 13.4881 2.02168 11.3363C2.16356 9.18455 2.99721 7.13631 4.39828 5.49706C5.79935 3.85781 7.69279 2.71537 9.79619 2.24013C11.8996 1.76489 14.1003 1.98232 16.07 2.86" stroke="currentColor" stroke-width="2"/>
+                                <path d="M22 4L12 14.01L9 11.01" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Aprovados</span>
+                            <span class="stat-value" id="statAprovados">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-red">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                                <path d="M15 9L9 15" stroke="currentColor" stroke-width="2"/>
+                                <path d="M9 9L15 15" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Rejeitados</span>
+                            <span class="stat-value" id="statRejeitados">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-blue">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M9 5H7C6.46957 5 5.96086 5.21071 5.58579 5.58579C5.21071 5.96086 5 6.46957 5 7V19C5 19.5304 5.21071 20.0391 5.58579 20.4142C5.96086 20.7893 6.46957 21 7 21H17C17.5304 21 18.0391 20.7893 18.4142 20.4142C18.7893 20.0391 19 19.5304 19 19V7C19 6.46957 18.7893 5.96086 18.4142 5.58579C18.0391 5.21071 17.5304 5 17 5H15" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Total de Pedidos</span>
+                            <span class="stat-value" id="statTotalPedidos">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid de pedidos -->
+                <div class="pedidos-grid" id="pedidosGrid">
+                    <!-- Cards de pedidos serão inseridos aqui via JavaScript -->
+                </div>
+
+                <!-- Mensagem quando não há pedidos -->
+                <div id="mensagemSemPedidos" class="empty-state" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 5H7C6.46957 5 5.96086 5.21071 5.58579 5.58579C5.21071 5.96086 5 6.46957 5 7V19C5 19.5304 5.21071 20.0391 5.58579 20.4142C5.96086 20.7893 6.46957 21 7 21H17C17.5304 21 18.0391 20.7893 18.4142 20.4142C18.7893 20.0391 19 19.5304 19 19V7C19 6.46957 18.7893 5.96086 18.4142 5.58579C18.0391 5.21071 17.5304 5 17 5H15"/>
+                        <path d="M9 5C9 4.46957 9.21071 3.96086 9.58579 3.58579C9.96086 3.21071 10.4696 3 11 3H13C13.5304 3 14.0391 3.21071 14.4142 3.58579C14.7893 3.96086 15 4.46957 15 5"/>
+                    </svg>
+                    <h3>Nenhum pedido encontrado</h3>
+                    <p>Não há pedidos com o filtro selecionado</p>
+                </div>
+                </div>
+
+            <!-- ====================================
+                 PÁGINA: MOVIMENTAÇÃO DE BRINDES
+                 ==================================== -->
+            <div id="pageMovimentacao" class="page-content">
+                <header class="header">
+                    <div class="header-left">
+                        <h1>Movimentação de Brindes</h1>
+                        <p>Controle de entrada e saída de peças do estoque</p>
+                    </div>
+                    <div class="header-right">
+                        <div class="user-badge">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            <span id="userBadgeMovimentacao"></span>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- Cards de resumo -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-blue">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M20 7H4C2.89543 7 2 7.89543 2 9V19C2 20.1046 2.89543 21 4 21H20C21.1046 21 22 20.1046 22 19V9C22 7.89543 21.1046 7 20 7Z" stroke="currentColor" stroke-width="2"/>
+                                <path d="M16 21V5C16 4.46957 15.7893 3.96086 15.4142 3.58579C15.0391 3.21071 14.5304 3 14 3H10C9.46957 3 8.96086 3.21071 8.58579 3.58579C8.21071 3.96086 8 4.46957 8 5V21" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Estoque Total</span>
+                            <span class="stat-value" id="estoqueTotal">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-green">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Entradas do Dia</span>
+                            <span class="stat-value" id="entradasDia">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-red">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Saídas do Dia</span>
+                            <span class="stat-value" id="saidasDia">0</span>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon stat-icon-blue">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M12 2V6M12 18V22M4.93 4.93L7.76 7.76M16.24 16.24L19.07 19.07M2 12H6M18 12H22M4.93 19.07L7.76 16.24M16.24 7.76L19.07 4.93" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+                        <div class="stat-content">
+                            <span class="stat-label">Saldo Atual</span>
+                            <span class="stat-value" id="saldoAtual">0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seleção de produto -->
+                <div class="movimentacao-selecao">
+                    <h3>Selecione o Produto</h3>
+                    <div class="produto-search-container">
+                        <select id="produtoSelecionado" class="produto-select">
+                            <option value="">Selecione um produto...</option>
+                        </select>
+                    </div>
+                    
+                    <div id="produtoInfoCard" class="produto-info-card" style="display: none;">
+                        <div class="produto-info-header">
+                            <div>
+                                <h4 id="produtoInfoNome"></h4>
+                                <p id="produtoInfoCategoria"></p>
+                            </div>
+                            <span class="produto-info-codigo" id="produtoInfoCodigo"></span>
+                        </div>
+                        <div class="produto-info-body">
+                            <div class="produto-info-item">
+                                <span class="label">Quantidade Atual</span>
+                                <span class="value" id="produtoInfoQtd">0</span>
+                            </div>
+                            <div class="produto-info-item">
+                                <span class="label">Categoria</span>
+                                <span class="value" id="produtoInfoCat"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cards de entrada e saída -->
+                <div class="movimentacao-grid">
+                    <!-- Card de Entrada -->
+                    <div class="movimentacao-card entrada-card">
+                        <div class="movimentacao-card-header">
+                            <div class="movimentacao-icon entrada-icon">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <h3>Entrada</h3>
+                        </div>
+                        <div class="movimentacao-card-body">
+                            <p class="movimentacao-descricao">Adicionar ao estoque</p>
+                            <form id="formEntrada" class="movimentacao-form">
+                                <div class="form-group">
+                                    <label for="entradaQuantidade">Quantidade</label>
+                                    <input type="number" id="entradaQuantidade" min="1" placeholder="Digite a quantidade" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="entradaObservacao">Observação/Motivo</label>
+                                    <textarea id="entradaObservacao" rows="3" placeholder="Ex: Compra de novos itens..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn-movimentacao btn-entrada">
+                                    <svg viewBox="0 0 24 24" fill="none">
+                                        <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    Adicionar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Card de Saída -->
+                    <div class="movimentacao-card saida-card">
+                        <div class="movimentacao-card-header">
+                            <div class="movimentacao-icon saida-icon">
+                                <svg viewBox="0 0 24 24" fill="none">
+                                    <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                            </div>
+                            <h3>Saída</h3>
+                        </div>
+                        <div class="movimentacao-card-body">
+                            <p class="movimentacao-descricao">Retirar do estoque</p>
+                            <form id="formSaida" class="movimentacao-form">
+                                <div class="form-group">
+                                    <label for="saidaQuantidade">Quantidade</label>
+                                    <input type="number" id="saidaQuantidade" min="1" placeholder="Digite a quantidade" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="saidaObservacao">Observação/Motivo</label>
+                                    <textarea id="saidaObservacao" rows="3" placeholder="Ex: Entrega ao cliente..." required></textarea>
+                                </div>
+                                <button type="submit" class="btn-movimentacao btn-saida">
+                                    <svg viewBox="0 0 24 24" fill="none">
+                                        <path d="M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                    </svg>
+                                    Retirar
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Histórico de movimentações -->
+                <div class="historico-container">
+                    <div class="historico-header">
+                        <h3>Histórico de Movimentações</h3>
+                        <div class="historico-filtros">
+                            <select id="filtroTipo" class="filter-select-small">
+                                <option value="todos">Todos os tipos</option>
+                                <option value="entrada">Entradas</option>
+                                <option value="saida">Saídas</option>
+                            </select>
+                            <select id="filtroProdutoHistorico" class="filter-select-small">
+                                <option value="todos">Todos os produtos</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="historico-tabela-container">
+                        <table class="historico-tabela">
+                            <thead>
+                                <tr>
+                                    <th>Tipo</th>
+                                    <th>Produto</th>
+                                    <th>Quantidade</th>
+                                    <th>Usuário</th>
+                                    <th>Perfil</th>
+                                    <th>Data/Hora</th>
+                                    <th>Observação</th>
+                                </tr>
+                            </thead>
+                            <tbody id="historicoTabela">
+                                <tr>
+                                    <td colspan="7" style="text-align: center; padding: 2rem; color: #64748b;">
+                                        Nenhuma movimentação registrada
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====================================
+                 PÁGINA: RELATÓRIOS
+                 ==================================== -->
+            <div id="pageRelatorios" class="page-content">
+                <header class="header">
+                    <div class="header-left">
+                        <h1>Relatórios</h1>
+                        <p>Análises e estatísticas do estoque</p>
+                    </div>
+                    <div class="header-right">
+                        <button id="btnExportarRelatorio" class="btn-primary">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.7893 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2"/>
+                                <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2"/>
+                                <path d="M12 15V3" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            Exportar PDF
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Relatórios em grid -->
+                <div class="reports-grid">
+                    <!-- Relatório: Produtos por Categoria -->
+                    <div class="report-card">
+                        <h3>Produtos por Categoria</h3>
+                        <div id="chartCategoria" class="chart-container">
+                            <!-- Gráfico será renderizado aqui -->
+                        </div>
+                    </div>
+
+                    <!-- Relatório: Movimentações Recentes -->
+                    <div class="report-card full-width">
+                        <h3>Movimentações Recentes</h3>
+                        <div class="timeline-container">
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <strong>Entrada de Produtos</strong>
+                                    <p>50 unidades de Filtro de Óleo adicionadas</p>
+                                    <span class="timeline-date">Hoje, 14:30</span>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <strong>Saída de Produtos</strong>
+                                    <p>12 unidades de Pastilha de Freio vendidas</p>
+                                    <span class="timeline-date">Hoje, 11:15</span>
+                                </div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-marker"></div>
+                                <div class="timeline-content">
+                                    <strong>Alerta de Estoque</strong>
+                                    <p>Óleo de Motor 5W30 com estoque baixo</p>
+                                    <span class="timeline-date">Ontem, 16:45</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Relatório: Status do Estoque -->
+                    <div class="report-card">
+                        <h3>Status do Estoque</h3>
+                        <div class="status-list">
+                            <div class="status-item">
+                                <span class="status-label">Produtos em Estoque</span>
+                                <span class="status-value status-green" id="relEmEstoque">0</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Estoque Baixo</span>
+                                <span class="status-value status-yellow" id="relEstoqueBaixo">0</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Sem Estoque</span>
+                                <span class="status-value status-red" id="relSemEstoque">0</span>
+                            </div>
+                            <div class="status-item">
+                                <span class="status-label">Total de Produtos</span>
+                                <span class="status-value" id="relTotalProdutos">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ====================================
+                 PÁGINA: CONFIGURAÇÕES
+                 ==================================== -->
+            <div id="pageConfiguracoes" class="page-content">
+                <header class="header">
+                    <div class="header-left">
+                        <h1>Configurações</h1>
+                        <p>Personalize o sistema de acordo com suas necessidades</p>
+                    </div>
+                </header>
+
+                <!-- Seções de configuração -->
+                <div class="settings-container">
+                    <!-- Configuração: Perfil do Usuário -->
+                    <div class="settings-card">
+                        <h3>Perfil do Usuário</h3>
+                        <form id="formPerfil" class="settings-form">
+                            <div class="form-group">
+                                <label for="configNome">Nome Completo</label>
+                                <input type="text" id="configNome" value="Administrador" placeholder="Seu nome">
+                            </div>
+                            <div class="form-group">
+                                <label for="configEmail">E-mail</label>
+                                <input type="email" id="configEmail" value="admin@gotemburgo.com" placeholder="seu@email.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="configCargo">Cargo</label>
+                                <input type="text" id="configCargo" value="Gerente" placeholder="Seu cargo">
+                            </div>
+                            <button type="submit" class="btn-primary">Salvar Alterações</button>
+                        </form>
+                    </div>
+
+                    <!-- Configuração: Gerenciamento de Usuários e Permissões -->
+                    <div class="settings-card" id="cardPermissoes">
+                        <h3>Gerenciamento de Usuários e Permissões</h3>
+                        <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 1.5rem;">
+                            Controle os níveis de acesso dos usuários do sistema. Somente administradores podem gerenciar permissões.
+                        </p>
+
+                        <!-- Botão Adicionar Usuário -->
+                        <button id="btnAdicionarUsuario" class="btn-primary" style="margin-bottom: 1.5rem;">
+                            <svg viewBox="0 0 24 24" fill="none">
+                                <path d="M16 21V19C16 17.9391 15.5786 16.9217 14.8284 16.1716C14.0783 15.4214 13.0609 15 12 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21" stroke="currentColor" stroke-width="2"/>
+                                <circle cx="8.5" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                                <path d="M20 8V14" stroke="currentColor" stroke-width="2"/>
+                                <path d="M23 11H17" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                            Adicionar Usuário
+                        </button>
+
+                        <!-- Lista de Usuários -->
+                        <div class="users-list" id="listaUsuarios">
+                            <!-- Usuários serão inseridos via JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Configuração: Integração com Google Sheets -->
+                    <div class="settings-card">
+                        <h3>Integração com Google Sheets</h3>
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label for="configSheetId">ID da Planilha</label>
+                                <input type="text" id="configSheetId" placeholder="Cole o ID da sua planilha do Google Sheets">
+                                <small style="color: #64748b; font-size: 0.813rem; margin-top: 0.5rem; display: block;">
+                                    Encontre o ID na URL da planilha: https://docs.google.com/spreadsheets/d/<strong>[ID]</strong>/edit
+                                </small>
+                            </div>
+                            <div class="form-group">
+                                <label for="configApiKey">API Key do Google</label>
+                                <input type="password" id="configApiKey" placeholder="Sua API Key">
+                            </div>
+                            <div style="display: flex; gap: 1rem;">
+                                <button id="btnSalvarIntegracao" class="btn-primary">Salvar Integração</button>
+                                <button id="btnTestarConexao" class="btn-secondary">Testar Conexão</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Configuração: Preferências do Sistema -->
+                    <div class="settings-card">
+                        <h3>Preferências do Sistema</h3>
+                        <div class="settings-form">
+                            <div class="form-group">
+                                <label for="configIdioma">Idioma</label>
+                                <select id="configIdioma">
+                                    <option value="pt-BR">Português (Brasil)</option>
+                                    <option value="en">English</option>
+                                    <option value="es">Español</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="configEstoqueAlerta">Alerta de Estoque Baixo (%)</label>
+                                <input type="number" id="configEstoqueAlerta" value="20" min="0" max="100">
+                            </div>
+                            <button id="btnSalvarSistema" class="btn-primary">Salvar Preferências</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal para Adicionar/Editar Usuário -->
+    <div id="modalUsuario" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalUsuarioTitulo">Adicionar Usuário</h2>
+                <button id="btnFecharModalUsuario" class="btn-close">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M18 6L6 18" stroke="currentColor" stroke-width="2"/>
+                        <path d="M6 6L18 18" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </button>
+            </div>
+            <form id="formUsuario" class="modal-form">
+                <input type="hidden" id="usuarioId">
+                
+                <div class="form-group">
+                    <label for="usuarioNome">Nome Completo *</label>
+                    <input type="text" id="usuarioNome" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="usuarioEmail">E-mail *</label>
+                    <input type="email" id="usuarioEmail" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="usuarioSenha">Senha *</label>
+                    <input type="password" id="usuarioSenha">
+                    <small style="color: #64748b; font-size: 0.813rem; margin-top: 0.5rem; display: block;">
+                        Deixe em branco para manter a senha atual (ao editar)
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="usuarioNivel">Nível de Permissão *</label>
+                    <select id="usuarioNivel" required>
+                        <option value="usuario">Usuário - Visualizar peças e fazer solicitações</option>
+                        <option value="operario">Operário - Adicionar e retirar peças</option>
+                        <option value="admin">Administrador - Acesso total ao sistema</option>
+                    </select>
+                    <small style="color: #64748b; font-size: 0.813rem; margin-top: 0.5rem; display: block;">
+                        <strong>Usuário:</strong> Pode visualizar peças e fazer solicitações<br>
+                        <strong>Operário:</strong> Pode adicionar, retirar peças e aprovar solicitações<br>
+                        <strong>Admin:</strong> Acesso total, incluindo gerenciamento de usuários
+                    </small>
+                </div>
+
+                <div class="form-group">
+                    <label for="usuarioCargo">Cargo/Função</label>
+                    <input type="text" id="usuarioCargo" placeholder="Ex: Mecânico, Supervisor, etc.">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" id="btnCancelarUsuario" class="btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar Usuário</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Solicitação de Peças (para usuários comuns) -->
+    <div id="modalSolicitacao" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Solicitar Peça</h2>
+                <button id="btnFecharModalSolicitacao" class="btn-close">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M18 6L6 18" stroke="currentColor" stroke-width="2"/>
+                        <path d="M6 6L18 18" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </button>
+            </div>
+            <form id="formSolicitacao" class="modal-form">
+                <input type="hidden" id="solicitacaoProdutoId">
+                
+                <div class="form-group">
+                    <label>Produto</label>
+                    <input type="text" id="solicitacaoProdutoNome" readonly style="background: #f8fafc;">
+                </div>
+
+                <div class="form-group">
+                    <label for="solicitacaoQuantidade">Quantidade Solicitada *</label>
+                    <input type="number" id="solicitacaoQuantidade" min="1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="solicitacaoMotivo">Motivo/Observações *</label>
+                    <textarea id="solicitacaoMotivo" rows="4" style="width: 100%; padding: 0.875rem 1rem; border: 2px solid #e2e8f0; border-radius: 10px; font-family: inherit; resize: vertical;" required></textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" id="btnCancelarSolicitacao" class="btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn-primary">Enviar Solicitação</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal existente de produtos -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitulo">Adicionar Produto</h2>
+                <button id="btnFecharModal" class="btn-close">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M18 6L6 18" stroke="currentColor" stroke-width="2"/>
+                        <path d="M6 6L18 18" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <form id="formProduto" class="modal-form">
+                <input type="hidden" id="produtoId">
+                
+                <div class="form-group">
+                    <label for="imagemUpload">Imagem do Produto</label>
+                    <div class="image-upload-container">
+                        <div class="image-preview" id="imagePreview">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <circle cx="8.5" cy="8.5" r="1.5"/>
+                                <polyline points="21 15 16 10 5 21"/>
+                            </svg>
+                            <span>Nenhuma imagem selecionada</span>
+                        </div>
+                        <input type="file" id="imagemUpload" accept="image/*" style="display: none;">
+                        <input type="text" id="imagem" placeholder="URL da imagem será gerada automaticamente" readonly>
+                        <button type="button" class="btn-upload" onclick="document.getElementById('imagemUpload').click()">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            Escolher Imagem
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="codigo">Código do Produto</label>
+                        <input type="text" id="codigo" placeholder="Ex: VLV-001" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="categoria">Categoria</label>
+                        <select id="categoria" required>
+                            <option value="">Selecione...</option>
+                            <option value="Peças">Peças</option>
+                            <option value="Fluidos">Fluidos</option>
+                            <option value="Acessórios">Acessórios</option>
+                            <option value="Ferramentas">Ferramentas</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="nome">Nome do Produto</label>
+                    <input type="text" id="nome" placeholder="Ex: Filtro de Óleo" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="quantidade">Quantidade</label>
+                        <input type="number" id="quantidade" min="0" placeholder="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="estoqueMinimo">Estoque Mínimo</label>
+                        <input type="number" id="estoqueMinimo" min="0" placeholder="0" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="localizacao">Localização</label>
+                        <input type="text" id="localizacao" placeholder="Ex: A-12" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fornecedor">Fornecedor</label>
+                    <input type="text" id="fornecedor" placeholder="Ex: Volvo Parts Brasil" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="descricao">Descrição do Produto</label>
+                    <textarea id="descricao" placeholder="Descreva as características e especificações do produto..." rows="3"></textarea>
+                </div>
+                
+                <div class="modal-footer">
+                    <button type="button" id="btnCancelar" class="btn-secondary">Cancelar</button>
+                    <button type="submit" class="btn-primary">Salvar Produto</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
