@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="style/pedido.css">
-    
+    <link rel="icon" href="images/got.png" type="image/png">
 </head>
 <body>
     
@@ -67,7 +67,7 @@
             </div>
 
             <!-- Menu de navegação -->
-            <!-- Atualizado para suportar navegação entre páginas -->
+            <!-- Atualizado para sortar navegação entre páginas -->
             <nav class="sidebar-nav">
                 <a href="#" class="nav-item active" data-page="dashboard">
                     <svg viewBox="0 0 24 24" fill="none">
@@ -269,10 +269,10 @@
                     <div class="header-right">
                         <select id="filtroCategoria" class="filter-select">
                             <option value="">Todas as categorias</option>
-                            <option value="Peças">Peças</option>
-                            <option value="Fluidos">Fluidos</option>
-                            <option value="Acessórios">Acessórios</option>
-                            <option value="Ferramentas">Ferramentas</option>
+                            <option value="brindes">brindes</option>
+                            <option value="merchandising">merchandising</option>
+                            <option value="roupas">roupas</option>
+                            <option value="brindes especiais">brindes especiais</option>
                         </select>
                         <button id="btnAdicionarProduto" class="btn-primary">
                             <svg viewBox="0 0 24 24" fill="none">
@@ -393,7 +393,7 @@
                 <header class="header">
                     <div class="header-left">
                         <h1>Movimentação de Brindes</h1>
-                        <p>Controle de entrada e saída de peças do estoque</p>
+                        <p>Controle de entrada e saída de brindes do estoque</p>
                     </div>
                     <div class="header-right">
                         <div class="user-badge">
@@ -819,13 +819,13 @@
                 <div class="form-group">
                     <label for="usuarioNivel">Nível de Permissão *</label>
                     <select id="usuarioNivel" required>
-                        <option value="usuario">Usuário - Visualizar peças e fazer solicitações</option>
-                        <option value="operario">Operário - Adicionar e retirar peças</option>
+                        <option value="usuario">Usuário - Visualizar brindes e fazer solicitações</option>
+                        <option value="operario">Operário - Adicionar e retirar brindes</option>
                         <option value="admin">Administrador - Acesso total ao sistema</option>
                     </select>
                     <small style="color: #64748b; font-size: 0.813rem; margin-top: 0.5rem; display: block;">
-                        <strong>Usuário:</strong> Pode visualizar peças e fazer solicitações<br>
-                        <strong>Operário:</strong> Pode adicionar, retirar peças e aprovar solicitações<br>
+                        <strong>Usuário:</strong> Pode visualizar brindes e fazer solicitações<br>
+                        <strong>Operário:</strong> Pode adicionar, retirar brindes e aprovar solicitações<br>
                         <strong>Admin:</strong> Acesso total, incluindo gerenciamento de usuários
                     </small>
                 </div>
@@ -843,11 +843,11 @@
         </div>
     </div>
 
-    <!-- Modal para Solicitação de Peças (para usuários comuns) -->
+    <!-- Modal para Solicitação de brindes (para usuários comuns) -->
     <div id="modalSolicitacao" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Solicitar Peça</h2>
+                <h2>Solicitar brinde</h2>
                 <button id="btnFecharModalSolicitacao" class="btn-close">
                     <svg viewBox="0 0 24 24" fill="none">
                         <path d="M18 6L6 18" stroke="currentColor" stroke-width="2"/>
@@ -931,10 +931,10 @@
                         <label for="categoria">Categoria</label>
                         <select id="categoria" required>
                             <option value="">Selecione...</option>
-                            <option value="Peças">Peças</option>
-                            <option value="Fluidos">Fluidos</option>
-                            <option value="Acessórios">Acessórios</option>
-                            <option value="Ferramentas">Ferramentas</option>
+                            <option value="brindes">brindes</option>
+                            <option value="merchandising">merchandising</option>
+                            <option value="roupas">roupas</option>
+                            <option value="brindes especiais">brindes especiais</option>
                         </select>
                     </div>
                 </div>
