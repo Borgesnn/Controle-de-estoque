@@ -7,8 +7,8 @@ const produtos = [
   {
     id: 1,
     codigo: "VLV-001",
-    nome: "Filtro de Óleo",
-    categoria: "Peças",
+    nome: "Boné preto got",
+    categoria: "brindes",
     quantidade: 45,
     estoqueMinimo: 10,
     localizacao: "A-12",
@@ -19,8 +19,8 @@ const produtos = [
   {
     id: 2,
     codigo: "VLV-002",
-    nome: "Pastilha de Freio",
-    categoria: "Peças",
+    nome: "Caneta got",
+    categoria: "brindes",
     quantidade: 8,
     estoqueMinimo: 15,
     localizacao: "B-05",
@@ -31,8 +31,8 @@ const produtos = [
   {
     id: 3,
     codigo: "VLV-003",
-    nome: "Óleo de Motor 5W30",
-    categoria: "Fluidos",
+    nome: "Caminhão volvo fh",
+    categoria: "merchandising",
     quantidade: 0,
     estoqueMinimo: 20,
     localizacao: "C-08",
@@ -43,8 +43,8 @@ const produtos = [
   {
     id: 4,
     codigo: "VLV-004",
-    nome: "Bateria 60Ah",
-    categoria: "Acessórios",
+    nome: "Camisa uv",
+    categoria: "roupas",
     quantidade: 25,
     estoqueMinimo: 5,
     localizacao: "D-15",
@@ -55,8 +55,8 @@ const produtos = [
   {
     id: 5,
     codigo: "VLV-005",
-    nome: "Correia Dentada",
-    categoria: "Peças",
+    nome: "Taça de vinho",
+    categoria: "brindes especiais",
     quantidade: 30,
     estoqueMinimo: 10,
     localizacao: "A-20",
@@ -1548,29 +1548,55 @@ if (formSolicitacao) {
   formSolicitacao.addEventListener("submit", (e) => {
     e.preventDefault()
 
-    const prodId = Number.parseInt(solicitacaoProdutoId.value)
-    const produto = produtos.find((p) => p.id === prodId)
+    const submitBtn = formSolicitacao.querySelector('button[type="submit"]');
+    if (submitBtn) submitBtn.disabled = true;
 
-    const novaSolicitacao = {
-      id: solicitacoes.length > 0 ? Math.max(...solicitacoes.map((s) => s.id)) + 1 : 1,
-      produtoId: prodId,
-      produtoNome: produto.nome,
-      quantidade: Number.parseInt(solicitacaoQuantidade.value),
-      solicitante: usuarioAtual.nome,
-      solicitanteEmail: usuarioAtual.email,
-      motivo: solicitacaoMotivo.value,
-      status: "pendente",
-      dataSolicitacao: new Date().toISOString(),
+    const produtoIdVal = Number(document.getElementById('solicitacaoProdutoId').value);
+    const quantidadeVal = Number(document.getElementById('solicitacaoQuantidade').value);
+    const motivoVal = document.getElementById('solicitacaoMotivo').value.trim();
+    const produtoNomeVal = document.getElementById('solicitacaoProdutoNome').value;
+
+    const solicitanteEmail = usuarioAtual ? usuarioAtual.email : (document.getElementById('loginEmail')?.value || '');
+    const solicitanteNome = usuarioAtual ? usuarioAtual.nome : (document.getElementById('loginEmail')?.value || 'Usuário');
+
+    // previne duplicidade: mesma solicitação pendente do mesmo usuário para o mesmo produto
+    const duplicada = solicitacoes.some(s =>
+      s.produtoId === produtoIdVal &&
+      s.solicitanteEmail === solicitanteEmail &&
+      s.status === 'pendente'
+    );
+
+    if (duplicada) {
+      alert('Já existe uma solicitação pendente para este produto.');
+      if (submitBtn) submitBtn.disabled = false;
+      return;
     }
 
-    solicitacoes.push(novaSolicitacao)
-    console.log("[v0] Nova solicitação criada:", novaSolicitacao)
+    const novoId = solicitacoes.length ? Math.max(...solicitacoes.map(s => s.id)) + 1 : 1;
+    const novaSolicitacao = {
+      id: novoId,
+      produtoId: produtoIdVal,
+      produtoNome: produtoNomeVal,
+      quantidade: quantidadeVal,
+      solicitante: solicitanteNome,
+      solicitanteEmail,
+      motivo: motivoVal,
+      status: 'pendente',
+      dataSolicitacao: new Date().toISOString()
+    };
 
-    alert("Solicitação enviada com sucesso!\n\nUm operário irá analisar sua solicitação em breve.")
+    solicitacoes.push(novaSolicitacao);
 
-    modalSolicitacao.classList.remove("active")
-    formSolicitacao.reset()
-  })
+    // atualiza UI (chama função existente se houver)
+    if (typeof renderPedidos === 'function') renderPedidos();
+    if (typeof atualizarPedidosGrid === 'function') atualizarPedidosGrid();
+
+    // fecha modal de solicitação se botão existir
+    const btnFechar = document.getElementById('btnFecharModalSolicitacao');
+    if (btnFechar) btnFechar.click();
+
+    if (submitBtn) submitBtn.disabled = false;
+  });
 }
 
 // ====================================
@@ -1972,3 +1998,7 @@ function renderProductsGrid() {
   // Implementação da função para renderizar a grid de produtos
   renderizarGridProdutos()
 }
+
+const SUPABASE_URL = 'https://zrxsciwsabehmicbhctd.supabase.co'
+const SUPABASE_ANON_KEY = 'sb_publishable_GNUdGfkOQaOfdMhHN1GWig_0v_D22YD'
+const supabase = supabaseLib.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
